@@ -11,6 +11,10 @@
 #define DEVMAN_VERSION 1.0
 #define Y_MARGIN 1
 #define X_MARGIN 4
+#define BUFFSIZE 512
+#define DEVMAN_FILE_EXTENSION "txt"
+#define DEVMAN_SEARCH_DIR ".devman"
+
 
 /* functions to be defined later */
 int display_line(int, int, int);
@@ -18,13 +22,27 @@ int display_line(int, int, int);
 int main(int argc, char** argv) {
 	
 	/* Ensure the proper number of arguments are supplied */
-	if (1 == argc) {
+	if (2 > argc) {
 		printf("error: no search term provided\n");
 		printf("example:  %s help\n", argv[0]);
 		return EXIT_FAILURE;
 	} else if (2 < argc) {
 		printf("error: too many search terms provided\n");
 		printf("example:  %s help\n", argv[0]);
+		return EXIT_FAILURE;
+	}
+
+	/* get man page file path */
+	char filepath[BUFFSIZE];
+
+	snprintf(filepath, BUFFSIZE - 1, "%s/%s/%s.%s", getenv("HOME"), DEVMAN_SEARCH_DIR, argv[1], DEVMAN_FILE_EXTENSION);
+
+	int fd = open(filepath, O_RDONLY);
+
+	if (0 > fd) {
+		printf("Error: Page not found\n");
+		printf("No devman page at: %s\n", filepath);
+		perror("open");
 		return EXIT_FAILURE;
 	}
 
@@ -44,11 +62,10 @@ int main(int argc, char** argv) {
 
 	/* main loop: */
 	while (true) {
-		
-		int fd = open("example.txt", O_RDONLY);
 
 		int line = offset;
 
+		lseek(fd, 0, SEEK_SET);
 		while (display_line(line, cols, fd)) {
 			fflush(stdout);
 			line ++;
@@ -57,8 +74,6 @@ int main(int argc, char** argv) {
 		if (line > rows) {
 			can_move = true;
 		}
-	
-		close(fd);
 
 		/* refresh screen */
 		refresh();
@@ -70,7 +85,7 @@ int main(int argc, char** argv) {
 			break;
 		} else if (can_move && KEY_DOWN == key_pressed) {
 			offset --;
-			if (line - Y_MARGIN <= rows) {
+			if (line + Y_MARGIN <= rows) {
 				offset ++; // undo that last move
 			}
 		} else if (can_move && KEY_UP == key_pressed) {
@@ -83,6 +98,8 @@ int main(int argc, char** argv) {
 
 		clear();
 	}
+
+	close(fd);
 	
 	/* close the screen, exit cleanly */
 	endwin();

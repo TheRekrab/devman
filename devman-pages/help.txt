@@ -1,0 +1,32 @@
+DEVMAN HELP
+
+devman: a basic cli tool for development man pages
+
+usage:
+	devman <TOPIC>/<PAGE>
+
+	TOPIC  The topic (or language) that devman should search in.
+	PAGE   The exact man page that devman should open
+
+EXAMPLE
+	To get the devman page on devman itself, both topic and page should be 'devman':
+
+	devman devman/devman
+
+	To lookup a function in the python language, use this syntax:
+
+	devman python/<FUNCTION NAME>
+
+	where <FUNCTION NAME> is the name of the thing you want to lookup.
+
+ERRORS
+	devman is not yet fully developed, and therefore may be missing many important pages. Because of this, many pages may not yet exist.
+	If you can, please contribute to devman. See 'contribute' under 'devman':
+
+	devman devman/contribute
+
+CONTROLS
+	devman's controls are very simple:
+	
+	use the arrow keys for navigation (up and down)
+	to leave, press 'q'
