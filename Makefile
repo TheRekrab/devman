@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -lc -lncurses
+CFLAGS=-s -Wall -lc -lncurses
 SRC=devman.c
 EXTRAS=
 BIN=devman
@@ -17,3 +17,9 @@ init:
 	mkdir ~/.devman
 	cp -r ./devman-pages/* ~/.devman/
 
+install: $(BIN) init
+	@echo "-->>>>> IMPORTANT: Please make sure you run install as root! If you cannot do that, then run 'local-install' instead"
+	cp $(BIN) /usr/bin/$(BIN)
+
+local-install: $(BIN) init
+	cp $(BIN) ~/.local/bin/$(BIN)
