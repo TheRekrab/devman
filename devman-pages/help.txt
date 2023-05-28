@@ -30,3 +30,8 @@ CONTROLS
 	
 	use the arrow keys for navigation (up and down)
 	to leave, press 'q'
+
+ASSISTANCE
+	If you don't know the official devman name for the topic, then consult 'devman/topics':
+
+	devman devman/topics
